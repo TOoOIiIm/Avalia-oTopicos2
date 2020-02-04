@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:jsf="http://xmlns.jcp.org/jsf">
+<h:head>
+	<title>Acesso</title>
+</h:head>
+<h:body>
+		<center>
+			<h:form id="total">
+					<h:commandButton value="Voltar" onclick="history.go(-1); return true;">
+						<f:ajax execute="@this"></f:ajax>
+					</h:commandButton>
+					<h2>Cadastro Simples</h2>
+					<h:panelGrid id="cadastrosimples"  columns="3">
+						<h:outputLabel value="Nome: " />
+						<h:inputText id="idNome" value="#{cadastroController.usuario.nome}" >
+							<f:ajax render="@this"/>
+						</h:inputText>
+						<h:message for="idNome" style="color:red"/>
+						
+						<h:outputLabel value="Sobrenome: " />
+						<h:inputText id="idSobrenome" value="#{cadastroController.usuario.sobrenome}" />
+						<h:message for="idSobrenome" style="color:red"/>
+						
+						<h:outputLabel value="Login: " />
+						<h:inputText  id="idLogin" value="#{cadastroController.usuario.login}" />
+						<h:message for="idLogin" style="color:red"/>
+						
+						<h:outputLabel value="Senha: " />
+						<h:inputSecret id="idSenha" value="#{cadastroController.usuario.senha}" />
+						<h:message for="idSenha" style="color:red"/>
+						
+						<h:outputLabel value="CPF: " />
+						<h:inputSecret id="idCpf" value="#{cadastroController.usuario.cpf}" />
+						<h:message for="idCpf" style="color:red"/>
+						
+						<h:outputLabel  value="Data de Nascimento: " />
+						<input type="date" id="idDataNascimento" 
+							   jsf:value="#{cadastroController.usuario.datanascimento}"
+							   pattern="yyyy-MM-dd">
+							   <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+						</input>
+						<h:message for="idDataNascimento" style="color:red"/>
+						
+						<h:outputLabel  value="Estado:" />
+						<h:selectOneMenu id="idEstado" value="#{cadastroController.endereso.estado}">
+						  	<f:selectItem itemLabel="Selecione ..." />
+						  	<f:selectItems  value="#{cadastroController.listaEstado}"
+						   				  var="estado"
+						   				  itemLabel="#{estado.label}"
+						   				  itemValue="#{estado}"/>
+						</h:selectOneMenu>
+						<h:message for="idEstado" style="color:red"/>
+						
+						<h:outputLabel value="Cep: " />
+						<h:inputText  id="idCep" value="#{cadastroController.endereso.cep}" />
+						<h:message for="idCep" style="color:red"/>
+						
+						<h:outputLabel value="Rua: " />
+						<h:inputText id="idRua" value="#{cadastroController.endereso.rua}" />
+						<h:message for="idRua" style="color:red"/>
+						
+						<h:outputLabel value="Numero: " />
+						<h:inputText id="idNumero" value="#{cadastroController.endereso.numero}" />
+						<h:message for="idNumero" style="color:red"/>
+						
+					</h:panelGrid>
+				<h:form id="itCadastroTelefone">
+					<h2>Cadastro Telefone(s)</h2>
+					<h:panelGrid columns="3" id="cadastroTelefones">
+						<h:outputLabel value="DDD"/>
+						<h:inputText id="idDDD" value="#{cadastroController.telefone.ddd}"/>
+						<h:message for="idDDD" style="color:red"/>
+						
+						<h:outputLabel value="Numero"/>
+						<h:inputText id="idNumeroCelular" value="#{cadastroController.telefone.codigoarea}"/>
+						<h:message for="idNumeroCelular" style="color:red"/>
+						
+						<h:commandButton id="ValoresTelefone" value="Adicionar Telefone" actionListener="#{cadastroController.incluirTelefone}">
+							<f:ajax execute="idDDD idNumeroCelular" render="@form" />
+						</h:commandButton>
+						
+					</h:panelGrid>
+						<br/>
+					<h:panelGrid columns="3">	
+						<h:dataTable id="itTelefone" value="#{cadastroController.usuario.telefone}" var="obj">
+							<h:column>
+								<f:facet name="header">DDD</f:facet>
+								<h:outputLabel value="#{obj.ddd}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">Numero</f:facet>
+								<h:outputLabel value="#{obj.codigoarea}"/>
+							</h:column>
+							<h:column>
+								<h:commandButton value="Remover" actionListener="#{cadastroController.removerTelefone(obj)}">
+									<f:ajax execute="itTelefone" render="@form"></f:ajax>
+								</h:commandButton>
+							</h:column>
+						</h:dataTable>
+					</h:panelGrid>
+				</h:form>
+				<h:form id="itCadastroCartao">
+					<h2>Cadastro Cartão(ôes)</h2>
+					<h:panelGrid columns="6" id="cadastroCartoes">	
+						<h:outputLabel  value="Nome no cartao"/>
+						<h:inputText id="idNomeCartao" value="#{cadastroController.cardd.nomenocartao}"/>
+						<h:message for="idNomeCartao" style="color:red"/>
+						
+						<h:outputLabel value="Bandeira: " />
+						<h:selectOneMenu id="idBandeira" value="#{cadastroController.cardd.bandeira}">
+					  	<f:selectItem itemLabel="Selecione ..." />
+					  	<f:selectItems  value="#{cadastroController.listaCartao}"
+					   				  var="bandeira"
+					   				  itemLabel="#{bandeira.label}"
+					   				  itemValue="#{bandeira}"/>
+						</h:selectOneMenu>
+						<h:message for="idBandeira" style="color:red"/>
+						
+						<h:outputLabel  value="numero do Cartao"/>
+						<h:inputText id="idNumeroCartao" value="#{cadastroController.cardd.numerocartao}"/>
+						<h:message for="idNumeroCartao" style="color:red"/>
+						
+						<h:outputLabel  value="Tipodocartão: " />
+						<h:selectOneMenu id="idTipoCartao" value="#{cadastroController.cardd.tipo}">
+					  	<f:selectItem itemLabel="Selecione ..." />
+					  	<f:selectItems  value="#{cadastroController.listaCaartao}"
+					   				  var="tipo"
+					   				  itemLabel="#{tipo.label}"
+					   				  itemValue="#{tipo}"/>
+						</h:selectOneMenu>
+						<h:message for="idTipoCartao" style="color:red"/>
+						
+						<h:outputLabel value="Cvv"/>
+						<h:inputText id="idCvv" value="#{cadastroController.cardd.cvv}" requiredMessage="true">
+								<f:validateLength  maximum="3"></f:validateLength>
+						</h:inputText>
+						<h:message for="idCvv" style="color:red" />
+						
+						<h:outputLabel  value="Data de vencimento do cartao: " />
+						<input type="date" id="idDataVencimento" 
+						   		jsf:value="#{cadastroController.cardd.validadecartao}"
+						  		 pattern="dd-MM-yyyy">
+						   		<f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+						</input>
+						<h:message for="idDataVencimento" style="color:red"/>
+						
+						<h:outputLabel value="Cpf do cartao"/>
+						<h:inputText id="idCpfCartao" value="#{cadastroController.cardd.cpf}"/>
+						<h:message for="idCpfCartao" style="color:red"/>
+						
+						<h:commandButton id="ValoresCartao"  value="Adicionar Cartao"
+						actionListener="#{cadastroController.incluirCartao}">
+							<f:ajax execute="@this @form" render="@form" />
+						</h:commandButton>
+					</h:panelGrid>
+						<br/>
+						<br/>
+					<h:panelGrid columns="4">
+						<h:dataTable id="itCartao" value="#{cadastroController.usuario.cartoes}" var="objj">
+							<h:column>
+								<f:facet name="header">Bandeira</f:facet>
+								<h:outputLabel value="#{objj.nomenocartao}"/>
+							</h:column>
+							<h:column>
+								<f:facet name="header">Bandeira</f:facet>
+								<h:outputLabel value="#{objj.bandeira.label}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">D.V</f:facet>
+								<h:outputLabel value="#{objj.validadecartao}"/>
+							</h:column>
+							<h:column>
+								<f:facet name="header">Tipo</f:facet>
+								<h:outputLabel value="#{objj.tipo.label}"/>
+							</h:column>
+							<h:column>
+								<h:commandButton value="Remover" actionListener="#{cadastroController.excluirCartao(objj)}">
+									<f:ajax execute="Cartao" render="@form"></f:ajax>
+								</h:commandButton>
+							</h:column>
+						</h:dataTable>
+					</h:panelGrid>
+				</h:form>
+				
+				<h:commandButton value="Cadastrar" actionListener="#{cadastroController.cadastrar}">
+					<f:ajax execute="@form" render="@all"/>
+				</h:commandButton>
+				<h:commandButton value="Limpar" actionListener="#{cadastroController.limpar}">
+					<f:ajax execute="@this itCadastroCartao" render="@all itCadastroCartao total"/>
+				</h:commandButton>
+			</h:form>
+		</center>		
+</h:body>
+</html>

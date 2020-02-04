@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+</h:head>
+<h:body>
+	<center>
+		<h:form>
+		<h:messages>
+			<h:panelGrid>
+					<h:commandButton value="logout" actionListener="#{menuController.logOut}"/>
+			</h:panelGrid>
+			<h:panelGrid id="itPanelSearch" columns="3">
+			<h1>Menu</h1>
+				
+				<h:inputText id="itSearch" value="#{menuController.nomeproduto}"/>
+				
+				<h:commandButton value="Search" actionListener="#{menuController.search}">
+					<f:ajax execute="itPanelSearch" render="@all"></f:ajax>
+				</h:commandButton>
+				
+			</h:panelGrid>
+			<h:panelGrid id="itPanelProdutos">
+				<h:dataTable id="itProdutos" value="#{menuController.produtos}"  var="objj">
+					<h:column>
+						<f:facet name="header">Nome</f:facet>
+						<h:outputLabel value="#{objj.nome}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Tipo de Produto</f:facet>
+						<h:outputLabel value="#{objj.produto.label}"/>
+					</h:column>
+					<h:column>
+						<h:selectOneMenu id="idNomeLista" value="#{menuController.compras}" >
+						  	<f:selectItem noSelectionOption="true" itemLabel="SelecioneLista" />
+						  	<f:selectItems id="itCompra"  value="#{menuController.listacompras}"
+						   				  var="compra"
+						   				  itemLabel="#{compra.nome}"
+						   				  itemValue="#{compra}" />
+						   	<f:ajax execute="@this" render="itAdicionarAlista"/>
+						</h:selectOneMenu> 
+					</h:column>
+					<h:column>
+						<h:commandButton id="itAdicionarALista" value="adicionar" actionListener="#{menuController.adicionarALista(objj)}" 
+						disabled="#{menuController.compras.nome == null}">
+							<f:ajax execute="itNomeLista" render="@form"/>
+						</h:commandButton>
+					</h:column>
+					<h:column>
+						<h:commandButton id="itSobreProduto" value="sobre" actionListener="#{menuController.pesquisarSobreProduto}"/>
+					</h:column>
+				</h:dataTable>
+				<h:commandButton id="itAdicionarLista" value="CriarLista" actionListener="#{menuController.criarListaRedirect}">
+					<f:ajax execute="@this"></f:ajax>
+				</h:commandButton>
+			</h:panelGrid>
+			</h:messages>
+		</h:form>
+	</center>
+</h:body>
+</html>

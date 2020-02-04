@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:jsf="http://xmlns.jcp.org/jsf" 
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Cadastro de Usuário</title>
+	<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet"></link>
+</h:head>
+<h:body>
+	<div class="container">
+	
+			<h:form id="total">
+				<h2>Cadastro Simples</h2>
+				<h:panelGrid id="cadastrosimples">
+						
+					<span class="ui-float-label">
+						<p:outputLabel value="Nome: " />
+	       					<p:inputText id="idNome" value="#{cadastroController.usuario.nome}">
+	       					<f:ajax render="@this" />
+						</p:inputText>
+						<h:message for="idNome" style="color:red" />
+   					</span>
+
+					<span class="ui-float-label">
+						<p:outputLabel value="Sobrenome: " />
+	       					<p:inputText id="idSobrenome" value="#{cadastroController.usuario.sobrenome}">
+	       					<f:ajax render="@this" />
+						</p:inputText>
+						<h:message for="idSobrenome" style="color:red" />
+   					</span>
+   					
+   					<span class="ui-float-label">
+						<p:outputLabel value="Login: " />
+	       					<p:inputText id="idLogin" value="#{cadastroController.usuario.login}">
+	       					<f:ajax render="@this" />
+						</p:inputText>
+						<h:message for="idLogin" style="color:red" />
+   					</span>
+   					
+   					<span class="ui-float-label">
+						<p:outputLabel value="Senha: " />
+	       					<h:inputSecret id="idSenha" value="#{cadastroController.usuario.senha}">
+	       						<f:ajax render="@this" />
+							</h:inputSecret>
+						<h:message for="idSenha" style="color:red" />
+   					</span>
+   					
+   					<span class="ui-float-label">
+						<p:outputLabel value="CPF: " />
+	       					<p:inputMask id="idCpf" value="#{cadastroController.usuario.cpf}" mask="999.999.999-99"/>
+	       				<h:message for="idCpf" style="color:red" />
+   					</span>
+   					
+   					<span class="ui-float-label">
+						<h:outputLabel value="Data de Nascimento: " />
+						<input type="date" id="idDataNascimento"
+							jsf:value="#{cadastroController.usuario.datanascimento}"
+							pattern="yyyy-MM-dd">
+							<f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+						</input>
+					<h:message for="idDataNascimento" style="color:red" />
+   					</span>
+   					
+   					<p:outputLabel  value="Estado: " />
+        			<p:selectOneMenu id="idEstado" value="#{cadastroController.endereso.estado}" style="width:125px">
+			           <f:selectItems value="#{cadastroController.listaEstado}" label="Estados"
+						var="estado" itemLabel="#{estado.label}" itemValue="#{estado}" />
+       				</p:selectOneMenu>
+       				<h:message for="idEstado" style="color:red" />
+
+					<span class="ui-float-label">
+						<p:outputLabel value="Cep:" />
+	     			    <p:inputMask id="idCep" value="#{cadastroController.endereso.cep}" mask="99.999-999"/>
+	     			    <h:message for="idCep" style="color:red" />
+	     			</span>
+     			    
+     			    <span class="ui-float-label">
+						<p:outputLabel value="Rua: " />
+	       					<p:inputText id="idRua" value="#{cadastroController.endereso.rua}">
+	       					<f:ajax render="@this" />
+						</p:inputText>
+						<h:message for="idRua" style="color:red" />
+   					</span>
+   					
+   					<span class="ui-float-label">
+						<p:outputLabel value="Numero: " />
+	       					<p:inputMask id="idNumero" value="#{cadastroController.endereso.numero}" mask="99"/>
+	       				<h:message for="idNumero" style="color:red" />
+   					</span>
+	
+				</h:panelGrid>
+				<h:form id="itCadastroTelefone">
+					<h2>Cadastro Telefone(s)</h2>
+					<h:panelGrid columns="3" id="cadastroTelefones">
+						<h:outputLabel value="DDD" />
+						<p:inputMask id="idDDD" value="#{cadastroController.telefone.ddd}" mask=" (99)"/>
+						<!-- <h:message for="idDDD" style="color:red" /> -->
+
+						<h:outputLabel value="Numero" />
+						<p:inputMask id="idNumeroCelular" value="#{cadastroController.telefone.codigoarea}" mask=" 99999-9999"/>
+						<!-- <h:message for="idNumeroCelular" style="color:red" /> -->
+							
+						<p:growl id="growl" life="2000" />
+     					<p:commandButton value="Adicionar Telefone" id="ValoresTelefone" update="growl" action="#{cadastroController.incluirTelefone}" style="margin-right:20px;" styleClass="ui-priority-primary">
+     						<f:ajax execute="idDDD idNumeroCelular" render="@form" />
+							
+						</p:commandButton>
+
+					</h:panelGrid>
+					<br />
+					<h:panelGrid columns="3">
+						<h:dataTable id="itTelefone"
+							value="#{cadastroController.usuario.telefone}" var="obj">
+							<h:column>
+								<f:facet name="header">DDD</f:facet>
+								<h:outputLabel value="#{obj.ddd}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">Numero</f:facet>
+								<h:outputLabel value="#{obj.codigoarea}" />
+							</h:column>
+							<h:column>
+								<h:commandButton value="Remover"
+									actionListener="#{cadastroController.removerTelefone(obj)}">
+									<f:ajax execute="itTelefone" render="@form"></f:ajax>
+								</h:commandButton>
+							</h:column>
+						</h:dataTable>
+					</h:panelGrid>
+				</h:form>
+				<h:form id="itCadastroCartao">
+					<h2>Cadastro Cartão(ões)</h2>
+					<h:panelGrid id="cadastroCartoes">
+					
+						<span class="ui-float-label">
+							<p:outputLabel value="Nome no cartao: " />
+		       					<p:inputText id="idNomeCartao" value="#{cadastroController.cardd.nomenocartao}"  style="width:125px">
+		       					<f:ajax render="@this" />
+							</p:inputText>
+							<h:message for="idNomeCartao" style="color:red" />
+   						</span>
+   						
+   						<p:outputLabel  value="Bandeira: " />
+        				<p:selectOneMenu id="idBandeira" value="#{cadastroController.cardd.bandeira}">
+				           <f:selectItems value="#{cadastroController.listaCartao}" label="Bandeira"
+							var="bandeira" itemLabel="#{bandeira.label}" itemValue="#{bandeira}" />
+	       				</p:selectOneMenu>
+	       				<h:message for="idBandeira" style="color:red" />
+
+						<span class="ui-float-label">
+							<p:outputLabel value="Número do Cartão: " />
+		     			    <p:inputMask id="idNumeroCartao" value="#{cadastroController.cardd.numerocartao}" mask="9999-9999-9999-9999"/>
+		     			    <h:message for="idNumeroCartao" style="color:red" />
+	     			    </span>
+	     			    
+	     			    <p:outputLabel  value="Tipo do cartão: " />
+        				<p:selectOneMenu id="idTipoCartao" value="#{cadastroController.cardd.tipo}"  style="width:125px">
+				           <f:selectItems value="#{cadastroController.listaCaartao}" label="Tipo de Cartão"
+							var="tipo" itemLabel="#{tipo.label}" itemValue="#{tipo}" />
+	       				</p:selectOneMenu>
+	       				<h:message for="idTipoCartao" style="color:red" />
+						
+						<span class="ui-float-label">
+							<p:outputLabel value="Cvv: " />
+		     			    <p:inputMask id="idCvv" value="#{cadastroController.cardd.cvv}" mask="999"/>
+		     			    <h:message for="idCvv" style="color:red" />
+	     			    </span>
+	     			    
+	     			    <span class="ui-float-label">
+							<h:outputLabel value="Data de vencimento do cartao: " />
+							<input type="date" id="idDataVencimento"
+								jsf:value="#{cadastroController.cardd.validadecartao}"
+								pattern="dd-MM-yyyy">
+								<f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+							</input>
+							<h:message for="idDataVencimento" style="color:red" />
+   						</span>
+   						
+   						<span class="ui-float-label">
+							<p:outputLabel value="Cpf do cartão: " />
+	       					<p:inputMask id="idCpfCartao" value="#{cadastroController.cardd.cpf}" mask="999.999.999-99"/>
+		       				<h:message for="idCpfCartao" style="color:red" />
+   						</span>
+
+						
+						
+						<p:growl id="growl0" life="2000" />
+			    		<p:commandButton id="ValoresCartao" value="Adicionar Cartao" update="growl0" action="#{cadastroController.incluirCartao}" style="margin-right:20px;" styleClass="ui-priority-primary">
+							<f:ajax execute="idNomeCartao idBandeira idNumeroCartao idTipoCartao idDataVencimento idCpfCartao" render="@form" />
+						</p:commandButton>
+						
+					
+					</h:panelGrid>
+					<br />
+					<br />
+					<h:panelGrid columns="4">
+						<h:dataTable id="itCartao"
+							value="#{cadastroController.usuario.cartoes}" var="objj">
+							<h:column>
+								<f:facet name="header">Bandeira</f:facet>
+								<h:outputLabel value="#{objj.nomenocartao}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">Bandeira</f:facet>
+								<h:outputLabel value="#{objj.bandeira.label}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">D.V</f:facet>
+								<h:outputLabel value="#{objj.validadecartao}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">Tipo</f:facet>
+								<h:outputLabel value="#{objj.tipo.label}" />
+							</h:column>
+							<h:column>
+								<h:commandButton value="Remover"
+									actionListener="#{cadastroController.excluirCartao(objj)}">
+									<f:ajax execute="itCartao" render="@form"/>
+								</h:commandButton>
+							</h:column>
+						</h:dataTable>
+					</h:panelGrid>
+				</h:form>
+				
+				<p:growl id="growl2" life="2000" />
+			    <p:commandButton value="Cadastrar" update="growl2" action="#{cadastroController.cadastrar}" style="margin-right:20px;" styleClass="ui-priority-primary">
+					<f:ajax execute="@form total" render="@all" />
+				</p:commandButton>
+				 
+				 <p:growl id="growl3" life="2000" />
+			    <p:commandButton value="Limpar" update="growl3" action="#{cadastroController.limpar}" style="margin-right:20px;" styleClass="ui-priority-primary">
+					<f:ajax execute="@this itCadastroCartao" render="@all itCadastroCartao total" />
+				</p:commandButton>
+				 
+			</h:form>
+	</div>
+</h:body>
+</html>
